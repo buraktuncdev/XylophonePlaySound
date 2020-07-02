@@ -25,11 +25,26 @@ class PlaySoundDelegate: NSObject, PlaySoundProtocol {
             
             player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.wav.rawValue)
             guard let player = player else {return}
+            player.volume = 0.8  // volume down
+            player.prepareToPlay()
             
-            player.play()
             
         } catch let error{
             print(error.localizedDescription)
+        }
+        
+
+        let seconds = 0.2 // Time To Delay
+        let when = DispatchTime.now() + seconds
+
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.play()
+        }
+    }
+    
+    func play() {
+        if player?.isPlaying == false {
+            player?.play()
         }
     }
     
